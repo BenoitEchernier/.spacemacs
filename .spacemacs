@@ -221,7 +221,7 @@ user code."
   ;; 80 characters sacred rule
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  (setq whitespace-style '(face empty lines-tail trailing))
+  (setq whitespace-style '(face lines-tail trailing))
   (add-hook 'prog-mode-hook 'whitespace-mode)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
