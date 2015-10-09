@@ -33,14 +33,14 @@ values."
 
      ;; markdown
      ;; org
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
+     (shell :variables
+             shell-default-height 30
+             shell-default-position 'bottom)
+
      ;; spell-checking
      syntax-checking
      ;; version-control
 
-     ;; c-c++
      (c-c++ :variables
             c-c++-default-mode-for-headers 'c++-mode
             c-c++-enable-clang-support t)
@@ -55,7 +55,8 @@ values."
      ;; TODO : fix gtags
      ;; TODO : ajouter fun
      ;; TODO : ajouter web browser
-     
+     ;; TODO : ajouter erc
+
      themes-megapack
      )
    ;; List of additional packages that will be installed without being
@@ -64,7 +65,7 @@ values."
    ;; configuration in `dotspacemacs/config'.
    dotspacemacs-additional-packages '()
    ;; A list of packages and/or extensions that will not be install and loaded.
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages '(yasnippet)
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'. (default t)
@@ -264,7 +265,7 @@ user code."
   "Configuration function for user code.
  This function is called at the very end of Spacemacs initialization after
 layers configuration. You are free to put any user code."
-  (setq powerline-default-separator 'nil)
+  (setq powerline-default-separator 'arrow-fade)
   )
 
 (custom-set-faces
