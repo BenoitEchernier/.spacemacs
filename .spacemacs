@@ -47,6 +47,8 @@ values."
 
      semantic
 
+     rust
+
      latex
      gtags
 
