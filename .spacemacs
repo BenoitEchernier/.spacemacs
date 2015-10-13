@@ -31,25 +31,21 @@ values."
      emacs-lisp
      git
 
-     ;; markdown
-     ;; org
      (shell :variables
-             shell-default-height 30
-             shell-default-position 'bottom)
+            shell-default-height 30
+            shell-default-position 'bottom)
 
-     ;; spell-checking
      syntax-checking
-     ;; version-control
-
-     (c-c++ :variables
-            c-c++-default-mode-for-headers 'c++-mode
-            c-c++-enable-clang-support t)
 
      semantic
 
-     latex
-     gtags
+     (c-c++ :variables
+            ;; c-c++-default-mode-for-headers 'c++-mode
+            c-c++-enable-clang-support t)
 
+     latex
+
+     ;; TODO : cscope ?
      ;; TODO : ajouter mails
      ;; TODO : ajouter org-agenda
      ;; TODO : fix gtags
@@ -221,14 +217,14 @@ user code."
   ;; 80 characters sacred rule
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  (setq whitespace-style '(face lines-tail trailing))
+  ;; TODO : do not toggle whitespace every time in prog mode-line
+  ;; TODO : add symbols for spaces / tabs when whitespace mode is toggled
+  (setq whitespace-style (quote (spaces tabs face lines-tail trailing)))
   (add-hook 'prog-mode-hook 'whitespace-mode)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; C mode linux kernel coding style
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-  (setq c-default-style "linux")
 
   (defun c-lineup-arglist-tabs-only (ignored)
     "Line up argument lists by tabs, not spaces"
@@ -265,6 +261,13 @@ user code."
   "Configuration function for user code.
  This function is called at the very end of Spacemacs initialization after
 layers configuration. You are free to put any user code."
+
+  ;; Use the linux coding style as a default for c mode
+  (add-hook 'c-mode-hook (setq-default c-basic-offset 8
+                                       tab-width 8))
+  (add-hook 'c-mode-hook (setq indent-tabs-mode t))
+  (add-hook 'c-mode-hook (c-set-style "linux-tabs-only"))
+
   (setq powerline-default-separator 'arrow-fade)
   )
 
