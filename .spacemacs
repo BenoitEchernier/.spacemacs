@@ -40,7 +40,7 @@ values."
      semantic
 
      (c-c++ :variables
-            ;; c-c++-default-mode-for-headers 'c++-mode
+	    c-c++-default-mode-for-headers 'c++-mode
             c-c++-enable-clang-support t)
 
      latex
@@ -262,11 +262,19 @@ user code."
  This function is called at the very end of Spacemacs initialization after
 layers configuration. You are free to put any user code."
 
+  ;; C++ std headers location
+  (add-to-list 'company-c-headers-path-system "/usr/include/c++/4.8/")
+
+  ;; Use c++11 standard for flycheck
+  (add-hook 'c++-mode-hook (lambda () (setq flycheck-clang-language-standard "c++11")))
+
+  ;; Todo : flycheck-cppcheck setup for c++11 standard
+
   ;; Use the linux coding style as a default for c mode
-  (add-hook 'c-mode-hook (setq-default c-basic-offset 8
+  (add-hook 'c-mode-common-hook (setq-default c-basic-offset 8
                                        tab-width 8))
-  (add-hook 'c-mode-hook (setq indent-tabs-mode t))
-  (add-hook 'c-mode-hook (c-set-style "linux-tabs-only"))
+  (add-hook 'c-mode-common-hook (setq indent-tabs-mode t))
+  (add-hook 'c-mode-common-hook (c-set-style "linux-tabs-only"))
 
   (setq powerline-default-separator 'arrow-fade)
   )
