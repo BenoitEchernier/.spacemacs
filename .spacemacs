@@ -40,7 +40,7 @@ values."
      semantic
 
      (c-c++ :variables
-	    c-c++-default-mode-for-headers 'c++-mode
+            c-c++-default-mode-for-headers 'c++-mode
             c-c++-enable-clang-support t)
 
      latex
@@ -235,47 +235,36 @@ user code."
       (* (max steps 1)
          c-basic-offset)))
 
-  (add-hook 'c-mode-common-hook
-            (lambda ()
-              ;; Add kernel style
-              (c-add-style
-               "linux-tabs-only"
-               '("linux" (c-offsets-alist
-                          (arglist-cont-nonempty
-                           c-lineup-gcc-asm-reg
-                           c-lineup-arglist-tabs-only))))))
+  (c-add-style "linux-tabs-only" '("linux" (c-offsets-alist
+                                            (arglist-cont-nonempty
+                                             c-lineup-gcc-asm-reg
+                                             c-lineup-arglist-tabs-only))))
 
-  (add-hook 'c-mode-hook
-            (lambda ()
-              (let ((filename (buffer-file-name)))
-                ;; Enable kernel mode for the appropriate files
-                (when (and filename
-                           (string-match (expand-file-name "~/src/linux-trees")
-                                         filename))
-                  (setq indent-tabs-mode t)
-                  (setq show-trailing-whitespace t)
-                  (c-set-style "linux-tabs-only")))))
+  ;; Use the linux kernel coding style as a default for c/c++ modes
+  (add-hook 'c-mode-common-hook (lambda() (setq-default c-basic-offset 8
+                                                        tab-width 8)))
+  (add-hook 'c-mode-common-hook (lambda() (setq indent-tabs-mode t)))
+  (add-hook 'c-mode-common-hook (lambda() (c-set-style "linux-tabs-only")))
+
+  ;; C++ std headers location
+  ;; TODO : FIX
+  (add-hook 'company-mode-hook
+            (lambda()
+              (add-to-list
+               'company-c-headers-path-system "/usr/include/c++/4.8/")))
+
+  ;; Use c++11 standard for flycheck
+  (add-hook 'c++-mode-hook
+            (lambda () (setq flycheck-clang-language-standard "c++11")))
+
+  ;; TODO : flycheck-cppcheck setup for c++11 standard
   )
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
  This function is called at the very end of Spacemacs initialization after
 layers configuration. You are free to put any user code."
-
-  ;; C++ std headers location
-  (add-to-list 'company-c-headers-path-system "/usr/include/c++/4.8/")
-
-  ;; Use c++11 standard for flycheck
-  (add-hook 'c++-mode-hook (lambda () (setq flycheck-clang-language-standard "c++11")))
-
-  ;; Todo : flycheck-cppcheck setup for c++11 standard
-
-  ;; Use the linux coding style as a default for c mode
-  (add-hook 'c-mode-common-hook (setq-default c-basic-offset 8
-                                       tab-width 8))
-  (add-hook 'c-mode-common-hook (setq indent-tabs-mode t))
-  (add-hook 'c-mode-common-hook (c-set-style "linux-tabs-only"))
-
+  ;; Powerline's look
   (setq powerline-default-separator 'arrow-fade)
   )
 
