@@ -45,6 +45,8 @@ values."
 
      latex
 
+     rust
+
      ;; TODO : cscope ?
      ;; TODO : ajouter mails
      ;; TODO : ajouter org-agenda
@@ -258,6 +260,9 @@ user code."
             (lambda () (setq flycheck-clang-language-standard "c++11")))
 
   ;; TODO : flycheck-cppcheck setup for c++11 standard
+
+  ;; Setup racer for Rustlang autocompletion
+  (setq rust-enable-racer t)
   )
 
 (defun dotspacemacs/user-config ()
