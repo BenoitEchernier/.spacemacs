@@ -45,16 +45,6 @@ values."
 
      latex
 
-     rust
-
-     ;; TODO : cscope ?
-     ;; TODO : ajouter mails
-     ;; TODO : ajouter org-agenda
-     ;; TODO : fix gtags
-     ;; TODO : ajouter fun
-     ;; TODO : ajouter web browser
-     ;; TODO : ajouter erc
-
      themes-megapack
      )
    ;; List of additional packages that will be installed without being
@@ -219,8 +209,6 @@ user code."
   ;; 80 characters sacred rule
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  ;; TODO : do not toggle whitespace every time in prog mode-line
-  ;; TODO : add symbols for spaces / tabs when whitespace mode is toggled
   (setq whitespace-style (quote (spaces tabs face lines-tail trailing)))
   (add-hook 'prog-mode-hook 'whitespace-mode)
 
@@ -249,7 +237,6 @@ user code."
   (add-hook 'c-mode-common-hook (lambda() (c-set-style "linux-tabs-only")))
 
   ;; C++ std headers location
-  ;; TODO : FIX
   (add-hook 'company-mode-hook
             (lambda()
               (add-to-list
@@ -258,11 +245,6 @@ user code."
   ;; Use c++11 standard for flycheck
   (add-hook 'c++-mode-hook
             (lambda () (setq flycheck-clang-language-standard "c++11")))
-
-  ;; TODO : flycheck-cppcheck setup for c++11 standard
-
-  ;; Setup racer for Rustlang autocompletion
-  (setq rust-enable-racer t)
   )
 
 (defun dotspacemacs/user-config ()
