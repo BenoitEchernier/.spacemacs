@@ -51,13 +51,16 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages then consider to create a layer, you can also put the
    ;; configuration in `dotspacemacs/config'.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(powerline)
    ;; A list of packages and/or extensions that will not be install and loaded.
-   dotspacemacs-excluded-packages '(yasnippet)
+   dotspacemacs-excluded-packages '(evil
+                                    spaceline
+                                    yasnippet)
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'. (default t)
-   dotspacemacs-delete-orphan-packages t))
+   dotspacemacs-delete-orphan-packages t)
+  )
 
 (defun dotspacemacs/init ()
   "Initialization function.
@@ -89,14 +92,7 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(phoenix-dark-mono
-                         zenburn
-                         spacemacs-dark
-                         spacemacs-light
-                         solarized-light
-                         solarized-dark
-                         leuven
-                         monokai)
+   dotspacemacs-themes '(material)
    ;; If non nil the cursor color matches the state color.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
@@ -206,13 +202,6 @@ It is called immediately after `dotspacemacs/init'.  You are free to put any
 user code."
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; 80 characters sacred rule
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-  (setq whitespace-style (quote (spaces tabs face lines-tail trailing)))
-  (add-hook 'prog-mode-hook 'whitespace-mode)
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; C mode linux kernel coding style
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -231,8 +220,8 @@ user code."
                                              c-lineup-arglist-tabs-only))))
 
   ;; Use the linux kernel coding style as a default for c/c++ modes
-  (add-hook 'c-mode-common-hook (lambda() (setq-default c-basic-offset 8
-                                                        tab-width 8)))
+  (add-hook 'c-mode-common-hook (lambda() (setq-default c-basic-offset 8)))
+  (add-hook 'c-mode-common-hook (lambda() (setq-default tab-width 8)))
   (add-hook 'c-mode-common-hook (lambda() (setq indent-tabs-mode t)))
   (add-hook 'c-mode-common-hook (lambda() (c-set-style "linux-tabs-only")))
 
@@ -242,17 +231,27 @@ user code."
               (add-to-list
                'company-c-headers-path-system "/usr/include/c++/4.8/")))
 
-  ;; Use c++11 standard for flycheck
+  ;; use c++11 standard for flycheck
   (add-hook 'c++-mode-hook
             (lambda () (setq flycheck-clang-language-standard "c++11")))
+
+  (setq smooth-scrolling nil)
+
+  ;; powerline's look
+  (setq powerline-default-separator nil)
+
+  ;; 80 characters line rule
+  (setq whitespace-line-column 80)
+  (setq whitespace-style '(lines-tail))
+
+  (add-hook 'prog-mode-hook 'whitespace-mode)
   )
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
  This function is called at the very end of Spacemacs initialization after
 layers configuration. You are free to put any user code."
-  ;; Powerline's look
-  (setq powerline-default-separator 'arrow-fade)
+  ;;(setq-default spacemacs-show-trailing-whitespace nil)
   )
 
 (custom-set-faces
