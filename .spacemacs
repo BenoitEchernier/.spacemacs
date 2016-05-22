@@ -35,6 +35,7 @@ values."
             shell-default-height 30
             shell-default-position 'bottom)
 
+     shell-scripts
      syntax-checking
 
      semantic
@@ -241,10 +242,11 @@ user code."
   (setq powerline-default-separator nil)
 
   ;; 80 characters line rule
-  (setq whitespace-line-column 80)
-  (setq whitespace-style '(lines-tail))
+  (setq-default fci-rule-column 80)
+  (setq fci-rule-width 1)
+  (setq fci-rule-color "#073642")
 
-  (add-hook 'prog-mode-hook 'whitespace-mode)
+  (add-hook 'prog-mode-hook 'fci-mode)
   )
 
 (defun dotspacemacs/user-config ()
