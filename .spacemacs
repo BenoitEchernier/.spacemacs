@@ -28,23 +28,23 @@ values."
                       auto-completion-enable-help-tooltip t)
 
      better-defaults
-     emacs-lisp
-     git
 
+     syntax-checking
+
+     (c-c++ :variables
+            c-c++-enable-clang-support t
+            c-c++-default-mode-for-headers 'c++-mode)
+
+     semantic
+     python
+     shell-scripts
+     emacs-lisp
+     latex
+
+     git
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom)
-
-     shell-scripts
-     syntax-checking
-
-     semantic
-
-     (c-c++ :variables
-            c-c++-default-mode-for-headers 'c++-mode
-            c-c++-enable-clang-support t)
-
-     latex
 
      themes-megapack
      )
@@ -52,7 +52,7 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages then consider to create a layer, you can also put the
    ;; configuration in `dotspacemacs/config'.
-   dotspacemacs-additional-packages '(powerline)
+   dotspacemacs-additional-packages '()
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '(evil
                                     spaceline
@@ -85,7 +85,7 @@ values."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'official
+   dotspacemacs-startup-banner nil
    ;; List of items to show in the startup buffer. If nil it is disabled.
    ;; Possible values are: `recents' `bookmarks' `projects'.
    ;; (default '(recents projects))
@@ -176,7 +176,7 @@ values."
    ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters the
    ;; point when it reaches the top or bottom of the screen. (default t)
-   dotspacemacs-smooth-scrolling t
+   dotspacemacs-smooth-scrolling nil
    ;; If non-nil smartparens-strict-mode will be enabled in programming modes.
    ;; (default nil)
    dotspacemacs-smartparens-strict-mode nil
@@ -195,17 +195,15 @@ values."
    ;; specified with an installed package.
    ;; Not used for now. (default nil)
    dotspacemacs-default-package-repository nil
-   ))
+   )
+  )
 
 (defun dotspacemacs/user-init ()
   "Initialization function for user code.
 It is called immediately after `dotspacemacs/init'.  You are free to put any
 user code."
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; C mode linux kernel coding style
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+  ;; Helper function to align arguments with tabs only
   (defun c-lineup-arglist-tabs-only (ignored)
     "Line up argument lists by tabs, not spaces"
     (let* ((anchor (c-langelem-pos c-syntactic-element))
@@ -215,45 +213,34 @@ user code."
       (* (max steps 1)
          c-basic-offset)))
 
+  ;; Define a true linux style with tabs only
   (c-add-style "linux-tabs-only" '("linux" (c-offsets-alist
                                             (arglist-cont-nonempty
                                              c-lineup-gcc-asm-reg
                                              c-lineup-arglist-tabs-only))))
 
   ;; Use the linux kernel coding style as a default for c/c++ modes
-  (add-hook 'c-mode-common-hook (lambda() (setq-default c-basic-offset 8)))
-  (add-hook 'c-mode-common-hook (lambda() (setq-default tab-width 8)))
+  (add-hook 'c-mode-common-hook (lambda() (setq c-basic-offset 8)))
+  (add-hook 'c-mode-common-hook (lambda() (setq tab-width 8)))
   (add-hook 'c-mode-common-hook (lambda() (setq indent-tabs-mode t)))
   (add-hook 'c-mode-common-hook (lambda() (c-set-style "linux-tabs-only")))
 
-  ;; C++ std headers location
-  (add-hook 'company-mode-hook
-            (lambda()
-              (add-to-list
-               'company-c-headers-path-system "/usr/include/c++/4.8/")))
-
-  ;; use c++11 standard for flycheck
-  (add-hook 'c++-mode-hook
-            (lambda () (setq flycheck-clang-language-standard "c++11")))
-
-  (setq smooth-scrolling nil)
-
-  ;; powerline's look
-  (setq powerline-default-separator nil)
+  ;; Assembly indentation
+  (add-hook 'asm-mode-hook (lambda() (setq indent-tabs-mode nil)))
+  (add-hook 'asm-mode-hook (lambda() (setq tab-width 4)))
 
   ;; 80 characters line rule
-  (setq-default fci-rule-column 80)
-  (setq fci-rule-width 1)
-  (setq fci-rule-color "#073642")
-
-  (add-hook 'prog-mode-hook 'fci-mode)
+  (add-hook 'fci-mode-hook (lambda() (setq fci-rule-column 80)))
+  (add-hook 'fci-mode-hook (lambda() (setq fci-rule-width 1)))
+  (add-hook 'fci-mode-hook (lambda() (setq fci-rule-color "#3f535a")))
   )
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
  This function is called at the very end of Spacemacs initialization after
 layers configuration. You are free to put any user code."
-  ;;(setq-default spacemacs-show-trailing-whitespace nil)
+  ;; 80 characters line rule
+  (add-hook 'prog-mode-hook 'fci-mode)
   )
 
 (custom-set-faces
@@ -263,3 +250,9 @@ layers configuration. You are free to put any user code."
  ;; If there is more than one, they won't work right.
  '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
  '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(magit-log-arguments (quote ("-n64"))))
